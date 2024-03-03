@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
     let predators = Predators()
     @State var searchtext = ""
     @State var alphabetical : Bool = false
+    @State var currentSelection = PredatorType.all
     var filterDianos : [ApexPredator]{
+        predators.filter(by: currentSelection)
         predators.sort(by: alphabetical)
        return  predators.search(for: searchtext)
     }
@@ -22,9 +25,7 @@ struct ContentView: View {
             List(filterDianos){
                 predator in
                 NavigationLink{
-                    Image(predator.image)
-                        .resizable()
-                        .scaledToFit()
+                    PredatorDetail(predator: predator, position: .camera(MapCamera(centerCoordinate: predator.location, distance: 30000)))
                 }label : {
                     HStack{
                         //iMGE
@@ -70,7 +71,20 @@ struct ContentView: View {
                     }
                 }.symbolEffect(.bounce, value: alphabetical)
                 }
+                ToolbarItem(placement : .topBarTrailing){
+                    Menu{
+                        Picker("Filter",selection: $currentSelection.animation()){
+                            ForEach(PredatorType.allCases){
+                                type in
+                                Label (type.rawValue.capitalized, systemImage: type.icon)
+                            }
+                        }
+                    } label : {
+                        Image(systemName: "slider.horizontal.3")
+                    }
+                }
             }
+            
             
         }.preferredColorScheme(.dark)
     }
