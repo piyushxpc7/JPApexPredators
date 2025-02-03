@@ -14,6 +14,6 @@ DinoExplorer is a fun iOS app to locate, collect, and play with dinosaurs! Disco
 
 
 
-🔧 TeECH STACK
+🔧 TECH STACK
 
 Swift, SwiftUI, ARKit, Firebase, MapKit
